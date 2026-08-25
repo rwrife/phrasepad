@@ -6,6 +6,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhrasePad.Core", "src/Phras
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhrasePad.Core.Tests", "tests/PhrasePad.Core.Tests/PhrasePad.Core.Tests.csproj", "{A5FDF4D5-B0D0-4C77-A9A0-4BB20C3A77C4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhrasePad.MacOS", "src/PhrasePad.MacOS/PhrasePad.MacOS.csproj", "{AB4E972F-D5D9-4F9F-A279-D86479EFD0CC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhrasePad.MacOS.Tests", "tests/PhrasePad.MacOS.Tests/PhrasePad.MacOS.Tests.csproj", "{59A1E7FE-34A5-4410-9C38-81F89EFC83EA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,6 +24,14 @@ Global
 		{A5FDF4D5-B0D0-4C77-A9A0-4BB20C3A77C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A5FDF4D5-B0D0-4C77-A9A0-4BB20C3A77C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A5FDF4D5-B0D0-4C77-A9A0-4BB20C3A77C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB4E972F-D5D9-4F9F-A279-D86479EFD0CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB4E972F-D5D9-4F9F-A279-D86479EFD0CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB4E972F-D5D9-4F9F-A279-D86479EFD0CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB4E972F-D5D9-4F9F-A279-D86479EFD0CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59A1E7FE-34A5-4410-9C38-81F89EFC83EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59A1E7FE-34A5-4410-9C38-81F89EFC83EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59A1E7FE-34A5-4410-9C38-81F89EFC83EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59A1E7FE-34A5-4410-9C38-81F89EFC83EA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
