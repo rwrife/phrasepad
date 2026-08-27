@@ -10,6 +10,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhrasePad.MacOS", "src/Phra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhrasePad.MacOS.Tests", "tests/PhrasePad.MacOS.Tests/PhrasePad.MacOS.Tests.csproj", "{59A1E7FE-34A5-4410-9C38-81F89EFC83EA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhrasePad.Desktop", "src/PhrasePad.Desktop/PhrasePad.Desktop.csproj", "{92CE8DAC-DA25-4E6E-B956-C3CCB4358CEA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhrasePad.Desktop.Tests", "tests/PhrasePad.Desktop.Tests/PhrasePad.Desktop.Tests.csproj", "{78CCA2B5-D140-476F-8DE7-2A145C1E8473}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +36,14 @@ Global
 		{59A1E7FE-34A5-4410-9C38-81F89EFC83EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{59A1E7FE-34A5-4410-9C38-81F89EFC83EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{59A1E7FE-34A5-4410-9C38-81F89EFC83EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92CE8DAC-DA25-4E6E-B956-C3CCB4358CEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92CE8DAC-DA25-4E6E-B956-C3CCB4358CEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92CE8DAC-DA25-4E6E-B956-C3CCB4358CEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92CE8DAC-DA25-4E6E-B956-C3CCB4358CEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78CCA2B5-D140-476F-8DE7-2A145C1E8473}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78CCA2B5-D140-476F-8DE7-2A145C1E8473}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78CCA2B5-D140-476F-8DE7-2A145C1E8473}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78CCA2B5-D140-476F-8DE7-2A145C1E8473}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
