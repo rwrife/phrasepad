@@ -8,4 +8,10 @@ public interface IExpansionEngine
         Snippet snippet,
         string typedTrigger,
         CancellationToken cancellationToken = default);
+
+    ValueTask<ExpansionResult> ExpandAsync(
+        Snippet snippet,
+        string typedTrigger,
+        IReadOnlyDictionary<string, string> placeholderValues,
+        CancellationToken cancellationToken = default);
 }

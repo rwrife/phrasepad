@@ -73,6 +73,13 @@ public sealed class SnippetEditorViewModelTests
             return new ValueTask<ExpansionResult>(completion.Task);
         }
 
+        public ValueTask<ExpansionResult> ExpandAsync(
+            PhrasePad.Core.Models.Snippet snippet,
+            string typedTrigger,
+            IReadOnlyDictionary<string, string> placeholderValues,
+            CancellationToken cancellationToken = default) =>
+            ExpandAsync(snippet, typedTrigger, cancellationToken);
+
         public void Complete(string expansion, string result)
         {
             _updates[expansion].SetResult(new ExpansionResult(result, result.Length, 0));

@@ -129,6 +129,26 @@ public sealed class ExpansionEngineTests
             await engine.ExpandAsync(snippet, ";plain", cancellation.Token));
     }
 
+    [Fact]
+    public async Task ExpandAsync_FillsPlaceholdersBeforeTokensAndCursor()
+    {
+        var engine = new ExpansionEngine(new[]
+        {
+            new StubTokenResolver("date", "2026-08-28")
+        });
+        var snippet = new Snippet
+        {
+            Trigger = ";greet",
+            Expansion = "Dear {name}, {date}{cursor}!"
+        };
+        var values = new Dictionary<string, string> { ["name"] = "Ada" };
+
+        var result = await engine.ExpandAsync(snippet, ";greet", values);
+
+        Assert.Equal("Dear Ada, 2026-08-28!", result.FinalText);
+        Assert.Equal(20, result.CaretOffset);
+    }
+
     private sealed class FakeClipboardReader(string text) : IClipboardReader
     {
         public ValueTask<string> ReadTextAsync(CancellationToken cancellationToken = default) =>

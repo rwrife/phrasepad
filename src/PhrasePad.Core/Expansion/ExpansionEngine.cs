@@ -6,22 +6,39 @@ namespace PhrasePad.Core.Expansion;
 public sealed class ExpansionEngine : IExpansionEngine
 {
     private readonly IReadOnlyList<ITokenResolver> _tokenResolvers;
+    private readonly IPlaceholderResolver _placeholderResolver;
 
     public ExpansionEngine(IEnumerable<ITokenResolver> tokenResolvers)
     {
         _tokenResolvers = tokenResolvers.ToArray();
+        _placeholderResolver = new PlaceholderResolver(_tokenResolvers);
     }
 
-    public async ValueTask<ExpansionResult> ExpandAsync(
+    public ValueTask<ExpansionResult> ExpandAsync(
         Snippet snippet,
         string typedTrigger,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default) =>
+        ExpandTemplateAsync(snippet.Expansion, typedTrigger, cancellationToken);
+
+    public ValueTask<ExpansionResult> ExpandAsync(
+        Snippet snippet,
+        string typedTrigger,
+        IReadOnlyDictionary<string, string> placeholderValues,
+        CancellationToken cancellationToken = default) =>
+        ExpandTemplateAsync(
+            _placeholderResolver.Fill(snippet.Expansion, placeholderValues),
+            typedTrigger,
+            cancellationToken);
+
+    private async ValueTask<ExpansionResult> ExpandTemplateAsync(
+        string template,
+        string typedTrigger,
+        CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
         var output = new StringBuilder();
         int? caretOffset = null;
-        var template = snippet.Expansion;
 
         for (var index = 0; index < template.Length; index++)
         {
