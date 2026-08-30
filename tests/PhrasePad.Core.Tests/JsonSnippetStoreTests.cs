@@ -95,6 +95,155 @@ public sealed class JsonSnippetStoreTests
     }
 
     [Fact]
+    public async Task Save_WhenCancelled_PreservesTheExistingFile()
+    {
+        var root = Path.Combine(Path.GetTempPath(), $"phrasepad-tests-{Guid.NewGuid():N}");
+
+        try
+        {
+            var store = new JsonSnippetStore(root);
+            await store.SaveAsync(new SnippetLibrary
+            {
+                Snippets = [new Snippet { Trigger = ";keep", Expansion = "Keep" }]
+            });
+            var original = await File.ReadAllTextAsync(store.StoragePath);
+            using var cancellation = new CancellationTokenSource();
+            cancellation.Cancel();
+
+            await Assert.ThrowsAnyAsync<OperationCanceledException>(() =>
+                store.SaveAsync(new SnippetLibrary(), cancellation.Token));
+
+            Assert.Equal(original, await File.ReadAllTextAsync(store.StoragePath));
+        }
+        finally
+        {
+            if (Directory.Exists(root))
+            {
+                Directory.Delete(root, recursive: true);
+            }
+        }
+    }
+
+    [Fact]
+    public async Task Save_WhenLibraryStructureIsInvalid_PreservesTheExistingFile()
+    {
+        var root = Path.Combine(Path.GetTempPath(), $"phrasepad-tests-{Guid.NewGuid():N}");
+
+        try
+        {
+            var store = new JsonSnippetStore(root);
+            await store.SaveAsync(new SnippetLibrary
+            {
+                Snippets = [new Snippet { Trigger = ";keep", Expansion = "Keep" }]
+            });
+            var original = await File.ReadAllTextAsync(store.StoragePath);
+
+            await Assert.ThrowsAsync<System.Text.Json.JsonException>(() =>
+                store.SaveAsync(new SnippetLibrary { Groups = null! }));
+
+            Assert.Equal(original, await File.ReadAllTextAsync(store.StoragePath));
+        }
+        finally
+        {
+            if (Directory.Exists(root))
+            {
+                Directory.Delete(root, recursive: true);
+            }
+        }
+    }
+
+    [Fact]
+    public async Task Save_PreservesExistingUnixFileMode()
+    {
+        if (OperatingSystem.IsWindows())
+        {
+            return;
+        }
+
+        var root = Path.Combine(Path.GetTempPath(), $"phrasepad-tests-{Guid.NewGuid():N}");
+
+        try
+        {
+            var store = new JsonSnippetStore(root);
+            await store.SaveAsync(new SnippetLibrary());
+            var expectedMode = UnixFileMode.UserRead | UnixFileMode.UserWrite;
+            File.SetUnixFileMode(store.StoragePath, expectedMode);
+
+            await store.SaveAsync(new SnippetLibrary
+            {
+                Snippets = [new Snippet { Trigger = ";private", Expansion = "Sensitive" }]
+            });
+
+            Assert.Equal(expectedMode, File.GetUnixFileMode(store.StoragePath));
+        }
+        finally
+        {
+            if (Directory.Exists(root))
+            {
+                Directory.Delete(root, recursive: true);
+            }
+        }
+    }
+
+    [Fact]
+    public async Task Save_WhenFileChangedSinceLoad_RejectsTheStaleWrite()
+    {
+        var root = Path.Combine(Path.GetTempPath(), $"phrasepad-tests-{Guid.NewGuid():N}");
+
+        try
+        {
+            var firstStore = new JsonSnippetStore(root);
+            await firstStore.SaveAsync(new SnippetLibrary());
+            var secondStore = new JsonSnippetStore(root);
+            await firstStore.LoadAsync();
+            await secondStore.LoadAsync();
+            await firstStore.SaveAsync(new SnippetLibrary
+            {
+                Snippets = [new Snippet { Trigger = ";first", Expansion = "First" }]
+            });
+
+            await Assert.ThrowsAsync<SnippetStoreConcurrencyException>(() =>
+                secondStore.SaveAsync(new SnippetLibrary
+                {
+                    Snippets = [new Snippet { Trigger = ";second", Expansion = "Second" }]
+                }));
+
+            var persisted = await new JsonSnippetStore(root).LoadAsync();
+            Assert.Equal(";first", Assert.Single(persisted.Snippets).Trigger);
+        }
+        finally
+        {
+            if (Directory.Exists(root))
+            {
+                Directory.Delete(root, recursive: true);
+            }
+        }
+    }
+
+    [Theory]
+    [InlineData("{\"Groups\":null}")]
+    [InlineData("{\"Snippets\":[null]}")]
+    public async Task Load_WhenJsonStructureIsInvalid_ThrowsJsonException(string json)
+    {
+        var root = Path.Combine(Path.GetTempPath(), $"phrasepad-tests-{Guid.NewGuid():N}");
+
+        try
+        {
+            var store = new JsonSnippetStore(root);
+            await File.WriteAllTextAsync(store.StoragePath, json);
+
+            await Assert.ThrowsAsync<System.Text.Json.JsonException>(() => store.LoadAsync());
+        }
+        finally
+        {
+            if (Directory.Exists(root))
+            {
+                Directory.Delete(root, recursive: true);
+            }
+        }
+    }
+
+    [Fact]
     public async Task Load_WhenFileDoesNotExist_ReturnsEmptyLibrary()
     {
         var root = Path.Combine(Path.GetTempPath(), $"phrasepad-tests-{Guid.NewGuid():N}");
