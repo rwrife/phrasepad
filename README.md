@@ -72,10 +72,20 @@ Typing `;mtg` pops a small fill-in dialog for `topic` and `who`, then inserts th
 
 ```bash
 phrasepad list                       # list all snippets
-phrasepad expand ";sig"              # preview an expansion (no keystrokes)
+phrasepad list --json                # machine-readable library
+phrasepad expand ";sig"              # preview with an ⟦cursor⟧ marker
+phrasepad expand ";invoice" \
+  --field name=Ada --field amount=42 # fill placeholders without typing
 phrasepad export snippets.json       # back up your library
-phrasepad import snippets.json       # restore/merge a library
+phrasepad import snippets.json       # merge without replacing conflicts
 ```
+
+The CLI uses the same platform library as the GUI by default. Pass
+`--library <path>` to work with a specific library file. `list`, `expand`,
+`import`, and `export` accept `--json` where structured output is useful.
+Import conflicts leave the existing snippet or group unchanged and return exit
+code `4`; usage errors return `2`, missing triggers return `3`, and storage or
+JSON errors return `1`.
 
 ## Local-AI integration (optional, off by default)
 
